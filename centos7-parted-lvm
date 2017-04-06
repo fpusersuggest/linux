@@ -1,0 +1,25 @@
+```
+# parted /dev/sdb                                                                                                                                                                                 
+GNU Parted 3.1
+Viene usato /dev/sdb
+Benvenuti in GNU Parted. Digitare "help" per l'elenco dei comandi.
+(parted) mklabel gpt
+(parted) mkpart print 2048s 100%                                          
+(parted) align-check optimal 1
+1 allineata
+(parted) print unit mib                                                   
+Modello: VMware Virtual disk (scsi)
+Disco /dev/sdb: 215GB
+Dimensione del settore (logica/fisica): 512B/512B
+Tabella delle partizioni: gpt
+Flag del disco: 
+
+Numero  Inizio  Fine   Dimensione  File system  Nome   Flag
+ 1      1049kB  215GB  215GB                    print
+ 
+```
+
+parted -s /dev/sdb mklabel gpt mkpart primary ext4 2048s 100% set 1 lvm on
+vgcreate VolumeGroupName /dev/sdb1
+lvcreate -l 100%PVS -n VolumeName VolumeGroupName /dev/sdb1
+mkfs -t FSTYPE /dev/VolumeGroupName/VolumeName
